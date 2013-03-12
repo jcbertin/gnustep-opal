@@ -32,6 +32,10 @@
 #include FT_TYPE1_TABLES_H
 #include FT_GLYPH_H
 
+// Hacks
+#define _descriptor [self fontDescriptor]
+#define _matrix [self matrixWithCGTransform]
+// End hacks
 
 #define REAL_SIZE(x) CGFloatFromFontUnits(x, [_descriptor pointSize], fontFace->units_per_EM)
 
@@ -57,7 +61,21 @@ static const NSString *kOPFreeTypeLibrary = @"OPFreeTypeLibrary";
 - (NSInteger)_fontfaceIndex;
 @end
 
+// Hacks
+typedef struct OPMatrixWithCGTransform
+{
+  CGAffineTransform CGTransform;
+} OPMatrixWithCGTransform;
+// End hacks
+
 @implementation OPFreeTypeFont
+
+// Hacks
+- (OPMatrixWithCGTransform)matrixWithCGTransform
+{
+  return *(OPMatrixWithCGTransform*)matrix;
+}
+// End hacks
 
 - (FT_Library)currentThreadFreeTypeLibrary
 {

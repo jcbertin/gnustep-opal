@@ -32,6 +32,10 @@ else
 ADDITIONAL_LDFLAGS += -lgdi32
 endif
 
+# Hacks
+ADDITIONAL_LDFLAGS += -lgnustep-gui
+# End hacks
+
 ADDITIONAL_OBJCFLAGS += -Wall -g -O0 -std=gnu99
 ADDITIONAL_CFLAGS += -Wall -g -O0 -std=gnu99
 ADDITIONAL_LDFLAGS += -L../Source/obj 

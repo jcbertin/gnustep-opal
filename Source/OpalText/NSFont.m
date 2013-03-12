@@ -40,132 +40,19 @@
 
 #import "NSFont.h"
 
-const CGFloat *NSFontIdentityMatrix;
-
-
-@implementation NSFont
-
-+ (void)load
-{
-  static CGFloat identity[6] = {1.0, 0.0, 1.0, 0.0, 0.0, 0.0};
-  NSFontIdentityMatrix = identity;
-}
+@implementation NSFont(OpalText)
 
 //
 // Querying the Font
 //
-- (NSRect) boundingRectForFont
-{
-  return NSMakeRect(0,0,0,0);
-}
-- (NSString*) displayName
-{
-  return [self nameForKey: kCTFontFullNameKey];
-}
-- (NSString*) familyName
-{
-  return [self nameForKey: kCTFontFamilyNameKey];
-}
-- (NSString*) fontName
-{
-  return [self nameForKey: kCTFontPostScriptNameKey];
-}
-- (BOOL) isFixedPitch
-{
-  return NO;
-}
-- (const CGFloat*) matrix
-{
-  return _matrix.PSMatrix;
-}
-- (NSAffineTransform*) textTransform
-{
-  // FIXME: Need to implement bridging between NSFontMatrixAttribute and kCTFontMatrixAttribute somewhere
-  NSAffineTransform *transform = [NSAffineTransform transform];
-  [transform setTransformStruct: _matrix.NSTransform];
-  return transform;
-}
-
-- (CGFloat) pointSize
-{
-  return [[[self fontDescriptor] objectForKey: NSFontSizeAttribute] doubleValue];
-}
-- (NSFont*) printerFont
-{
-  return nil;
-}
-- (NSFont*) screenFont
-{
-  return nil;
-}
-- (CGFloat) ascender
-{
-  return 0;
-}
-- (CGFloat) descender
-{
-  return 0;
-}
-- (CGFloat) capHeight
-{
-  return 0;
-}
-- (CGFloat) italicAngle
-{
-  return 0;
-}
 - (CGFloat) leading
 {
   return 0;
-}
-- (NSSize) maximumAdvancement
-{
-  return NSMakeSize(0,0);
-}
-- (CGFloat) underlinePosition
-{
-  return 0;
-}
-- (CGFloat) underlineThickness
-{
-  return 0;
-}
-- (CGFloat) xHeight
-{
-  return 0;
-}
-- (NSUInteger) numberOfGlyphs
-{
-  return 0;
-}
-- (NSCharacterSet*) coveredCharacterSet
-{
-  return [[self fontDescriptor] objectForKey: kCTFontCharacterSetAttribute];
-}
-- (NSFontDescriptor*) fontDescriptor
-{
-  return _descriptor;
-}
-- (NSFontRenderingMode) renderingMode
-{
-  return 0;
-}
-- (NSFont*) screenFontWithRenderingMode: (NSFontRenderingMode)mode
-{
-  return nil;
 }
 
 //
 // Manipulating Glyphs
 //
-- (NSSize) advancementForGlyph: (NSGlyph)aGlyph
-{
-  return NSMakeSize(0,0);
-}
-- (NSRect) boundingRectForGlyph: (NSGlyph)aGlyph
-{
-  return NSMakeRect(0,0,0,0);
-}
 - (void) getAdvancements: (NSSizeArray)advancements
                forGlyphs: (const NSGlyph*)glyphs
                    count: (NSUInteger)count
@@ -180,14 +67,6 @@ const CGFloat *NSFontIdentityMatrix;
                 forGlyphs: (const NSGlyph*)glyphs
                     count: (NSUInteger)count
 {
-}
-- (NSGlyph) glyphWithName: (NSString*)glyphName
-{
-  return 0;
-}
-- (NSStringEncoding) mostCompatibleStringEncoding
-{
-  return 0;
 }
 
 //
@@ -214,15 +93,17 @@ const CGFloat *NSFontIdentityMatrix;
   {
     return nil;
   }
-  ASSIGN(_descriptor, aDescriptor);
-  NSAffineTransform *transform = [_descriptor objectForKey: NSFontMatrixAttribute];
+  NSAffineTransform *transform = [[self fontDescriptor] objectForKey: NSFontMatrixAttribute];
   if (transform == nil)
+  // FIXME: in one case we assign to CGTransform, in other to NSTransform?
+  // FIXME: since those are supposed to be in sync, that's probably wrong
   {
-    _matrix.CGTransform = CGAffineTransformIdentity;
+    memcpy(matrix, &CGAffineTransformIdentity, sizeof(matrix)); //_matrix.CGTransform = CGAffineTransformIdentity;
   }
   else
   {
-    _matrix.NSTransform = [transform transformStruct];
+    NSAffineTransformStruct transformStruct = [transform transformStruct];
+    memcpy(matrix, &transformStruct, sizeof(matrix)); //_matrix.NSTransform = [transform transformStruct];
   }
   return self;
 }
