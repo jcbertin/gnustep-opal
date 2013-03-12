@@ -133,9 +133,8 @@ CGPoint CGPathGetCurrentPoint(CGPathRef path)
     return CGPointZero;
   }
 
-  NSUInteger count = [path count];
-  // FIXME: ugly loop
-  for (NSUInteger i=(count-1); i>=0 && i<count; i--)
+  NSUInteger i = [path count];
+  while (i-- > 0)
   {
     CGPoint points[3];
     CGPathElementType type =[path elementTypeAtIndex: i points: points];
