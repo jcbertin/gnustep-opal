@@ -174,28 +174,6 @@ _get_bit_value(const unsigned char *base, size_t msb_off, size_t bit_width)
   }
 }
 
-
-/**
- * Rounds up a format to a standard size.
- */
-static void OPRoundUp(size_t bitsPerComponentIn, size_t bitsPerPixelIn, size_t *bitsPerComponentOut, size_t *bitsPerPixelOut)
-{
-  if (bitsPerComponentIn < 8)
-  {
-    *bitsPerComponentOut = 8;
-  }
-  else if (bitsPerComponentIn < 16)
-  {
-    *bitsPerComponentOut = 16;
-  }
-  else if (bitsPerComponentIn < 32)
-  {
-    *bitsPerComponentOut = 32;
-  }
-
-  *bitsPerPixelOut = (bitsPerPixelIn / bitsPerComponentIn) * (*bitsPerComponentOut);
-} 
-
 static bool OPImageFormatForCGFormat(
   size_t bitsPerComponent,
   size_t bitsPerPixel,
