@@ -1,6 +1,8 @@
 #ifdef __APPLE__
 #include <ApplicationServices/ApplicationServices.h>
 #else
+#include <AppKit/NSFont.h>
+#include <AppKit/NSFontDescriptor.h>
 #include <CoreGraphics/CoreGraphics.h>
 #include <CoreText/CoreText.h>
 
@@ -52,7 +54,7 @@ void dumpFontDescriptorInfo(CTFontDescriptorRef descriptor)
   NSString *attrib;
   while (attrib = [attribEnumerator nextObject])
   {
-    NSLog(@"Value for '%@': %@", attrib, [CTFontDescriptorCopyAttribute(descriptor, (CFStringRef)attrib) autorelease]);
+    NSLog(@"Value for '%@': %@", attrib, [(id)CTFontDescriptorCopyAttribute(descriptor, (CFStringRef)attrib) autorelease]);
   }
 }
 
@@ -77,7 +79,7 @@ void dumpFontInfo(CTFontRef font)
         
     CGSize translations;
     CTFontGetVerticalTranslationsForGlyphs(font, &i, &translations, 1);
-    NSLog(@"CTFontGetVerticalTranslationsForGlyphs %d gave translation (%lf, %lf)", i, advance, (double)translations.width, (double)translations.height);
+    NSLog(@"CTFontGetVerticalTranslationsForGlyphs %d gave translation (%lf, %lf)", i, (double)translations.width, (double)translations.height);
     
     if (i == 20)
     {
@@ -167,7 +169,7 @@ bool CTFontGetGlyphsForCharacters(
 
   NSLog(@"CTFontGetStringEncoding %d", CTFontGetStringEncoding(font));
 
-  NSLog(@"CTFontCopyCharacterSet %@", [CTFontCopyCharacterSet(font) autorelease]);
+  NSLog(@"CTFontCopyCharacterSet %@", [(id)CTFontCopyCharacterSet(font) autorelease]);
 
   NSLog(@"CTFontCopySupportedLanguages %@", [CTFontCopySupportedLanguages(font) autorelease]);
 
@@ -235,7 +237,7 @@ void enumerateBySerifStyle()
     t &= kCTFontClassMaskTrait;
     
     NSString *symbolicTraitString;
-    switch (t)
+    switch ((int)t)
     {
       default:
       case kCTFontUnknownClass:
@@ -285,7 +287,7 @@ void enumerateBySerifStyle()
   while (symbolicTraitString = [enumerator nextObject])
   {
     NSArray *descriptors = [dict objectForKey: symbolicTraitString];
-    NSLog(@"%@ fonts: (%d)", symbolicTraitString, [descriptors count]);
+    NSLog(@"%@ fonts: (%lu)", symbolicTraitString, (unsigned long)[descriptors count]);
     
     NSEnumerator *enumerator2 = [descriptors objectEnumerator];
     while (descriptor = [enumerator2 nextObject])
@@ -318,7 +320,7 @@ void draw(CGContextRef ctx, CGRect rect)
    * Note this should print the URL even though it's not in the dictionary
    * printed on the previous line
    */
-  NSLog(@"Times font URL: %@", [CTFontCopyAttribute(font, kCTFontURLAttribute) autorelease]);
+  NSLog(@"Times font URL: %@", [(id)CTFontCopyAttribute(font, kCTFontURLAttribute) autorelease]);
 
   CTFontDescriptorRef monoDesc = [CTFontDescriptorCreateWithAttributes([NSDictionary dictionaryWithObjectsAndKeys:
     [NSDictionary dictionaryWithObjectsAndKeys: 
@@ -346,14 +348,14 @@ void draw(CGContextRef ctx, CGRect rect)
 
   CGMutablePathRef path = [CGPathCreateMutable() autorelease];
   CGPathAddRect(path, NULL, CGRectMake(rect.origin.x, rect.origin.y + 100, rect.size.width/2, rect.size.height - 200));
-  CGContextAddPath(ctx, path);
+  CGContextAddPath(ctx, (CGPathRef)path);
   CGContextSetRGBStrokeColor(ctx, 0, 0, 0, 1);
   CGContextStrokePath(ctx);
   
   NSAttributedString *as = [[[NSMutableAttributedString alloc] initWithString: hamlet] autorelease];
-  CTFramesetterRef fs = [CTFramesetterCreateWithAttributedString(as) autorelease];
+  CTFramesetterRef fs = [CTFramesetterCreateWithAttributedString((CFAttributedStringRef)as) autorelease];
 
-  CTFrameRef frame = [CTFramesetterCreateFrame(fs, CFRangeMake(0,0), path, NULL) autorelease];
+  CTFrameRef frame = [CTFramesetterCreateFrame(fs, CFRangeMake(0,0), (CGPathRef)path, NULL) autorelease];
   CTFrameDraw(frame, ctx);
   
   

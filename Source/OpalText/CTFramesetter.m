@@ -61,7 +61,7 @@
   }
 
   _string = [string retain];
-  _ts = CTTypesetterCreateWithAttributedString(string);
+  _ts = CTTypesetterCreateWithAttributedString((CFAttributedStringRef)string);
 
   return self;
 }
@@ -139,7 +139,7 @@
 
 CTFramesetterRef CTFramesetterCreateWithAttributedString(CFAttributedStringRef string)
 {
-  return [[CTFramesetter alloc] initWithAttributedString: string];
+  return [[CTFramesetter alloc] initWithAttributedString: (NSAttributedString *)string];
 }
 
 CTFrameRef CTFramesetterCreateFrame(

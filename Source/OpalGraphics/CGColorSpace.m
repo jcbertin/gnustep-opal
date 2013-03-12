@@ -147,9 +147,9 @@ CGColorSpaceRef CGColorSpaceCreateIndexed(
   size_t lastIndex,
   const unsigned char *colorTable)
 {
-  return [[OPColorSpaceIndexed alloc] initWithBaseSpace: baseSpace
-                                              lastIndex: lastIndex
-                                             colorTable: colorTable];
+  return (CGColorSpaceRef)[[OPColorSpaceIndexed alloc] initWithBaseSpace: baseSpace
+							       lastIndex: lastIndex
+							      colorTable: colorTable];
 }  
 
 CGColorSpaceRef CGColorSpaceCreateLab(

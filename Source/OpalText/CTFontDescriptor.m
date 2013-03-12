@@ -88,7 +88,7 @@ CTFontDescriptorRef CTFontDescriptorCreateCopyWithVariation(
     newVariation = [[NSMutableDictionary alloc] init];
   }
   [newVariation setObject: [NSNumber numberWithDouble: variationValue]
-                   forKey: variationIdentifier];
+                   forKey: (id)variationIdentifier];
 
   NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:
     newVariation, kCTFontVariationAttribute,
@@ -111,8 +111,8 @@ CTFontDescriptorRef CTFontDescriptorCreateCopyWithFeature(
   }
   [newFeatureSettings addObject:
     [NSDictionary dictionaryWithObjectsAndKeys:
-      featureTypeIdentifier, kCTFontFeatureTypeIdentifierKey,
-      featureSelectorIdentifier, kCTFontFeatureSelectorIdentifierKey,
+      (id)featureTypeIdentifier, kCTFontFeatureTypeIdentifierKey,
+      (id)featureSelectorIdentifier, kCTFontFeatureSelectorIdentifierKey,
       nil]];
 
   NSDictionary *attributes = [NSDictionary dictionaryWithObjectsAndKeys:

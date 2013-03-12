@@ -480,7 +480,7 @@ NSStringEncoding CTFontGetStringEncoding(CTFontRef font)
 
 CFCharacterSetRef CTFontCopyCharacterSet(CTFontRef font)
 {
-  return [[font coveredCharacterSet] retain];
+  return (CFCharacterSetRef)[[font coveredCharacterSet] retain];
 }
 
 CFArrayRef CTFontCopySupportedLanguages(CTFontRef font)

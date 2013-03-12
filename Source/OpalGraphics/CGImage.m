@@ -105,7 +105,7 @@ void DumpPixel(const void *data, NSString *msg)
 
   if (aBitsPerComponent < 1 || aBitsPerComponent > 32)
   {
-    NSLog(@"Unsupported bitsPerComponent: %d", aBitsPerComponent);
+    NSLog(@"Unsupported bitsPerComponent: %zu", aBitsPerComponent);
     [self release];
     return nil;
   }
@@ -485,7 +485,7 @@ cairo_surface_t *opal_CGImageGetSurfaceForImage(CGImageRef img, cairo_surface_t 
     const size_t dstBitsPerPixel = 32;
     const size_t dstBytesPerRow = cairo_image_surface_get_stride(memSurf);
     
-    CGBitmapInfo dstBitmapInfo = kCGImageAlphaPremultipliedFirst;
+    CGBitmapInfo dstBitmapInfo = (CGBitmapInfo)kCGImageAlphaPremultipliedFirst;
     if (NSHostByteOrder() == NS_LittleEndian)
 	  {
     	dstBitmapInfo |= kCGBitmapByteOrder32Little;

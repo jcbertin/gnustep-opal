@@ -105,7 +105,7 @@ const CFStringRef kCTTypesetterOptionForcedEmbeddingLevel = @"kCTTypesetterOptio
 
 CTTypesetterRef CTTypesetterCreateWithAttributedString(CFAttributedStringRef string)
 {
-  return [[CTTypesetter alloc] initWithAttributedString: string
+  return [[CTTypesetter alloc] initWithAttributedString: (NSAttributedString *)string
                                                 options: nil];
 }
 
@@ -113,7 +113,7 @@ CTTypesetterRef CTTypesetterCreateWithAttributedStringAndOptions(
 	CFAttributedStringRef string,
 	CFDictionaryRef opts)
 {
-  return [[CTTypesetter alloc] initWithAttributedString: string
+  return [[CTTypesetter alloc] initWithAttributedString: (NSAttributedString *)string
                                                 options: opts];
 }
 

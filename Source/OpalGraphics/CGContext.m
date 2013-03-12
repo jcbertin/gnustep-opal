@@ -297,7 +297,7 @@ void CGContextSetLineWidth(CGContextRef ctx, CGFloat width)
 
 void CGContextSetLineJoin(CGContextRef ctx, CGLineJoin join)
 {
-  cairo_set_line_join(ctx->ct, join);
+  cairo_set_line_join(ctx->ct, (cairo_line_join_t)join);
 }
 
 void CGContextSetMiterLimit(CGContextRef ctx, CGFloat limit)
@@ -307,7 +307,7 @@ void CGContextSetMiterLimit(CGContextRef ctx, CGFloat limit)
 
 void CGContextSetLineCap(CGContextRef ctx, CGLineCap cap)
 {
-  cairo_set_line_cap(ctx->ct, cap);
+  cairo_set_line_cap(ctx->ct, (cairo_line_cap_t)cap);
 }
 
 void CGContextSetLineDash(
